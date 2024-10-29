@@ -1,6 +1,6 @@
 {
   "name": "logseq-rename-page-shortcut",
-  "version": "0.1.1",
+  "version": "0.1.7",
   "author": "Fabian Stanke",
   "main": "dist/index.html",
   "description": "Registers a shortcut in Logseq to rename the current page.",
