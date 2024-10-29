@@ -1,50 +1,46 @@
-name: Build plugin
-
 on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - "*" # Push events to matching any tag format, i.e. 1.0, 20.15.1
+      - "v*" # Push events to matching any tag format, i.e. 1.0, 20.15.1
+
+name: Upload Release Asset
 
 env:
   PLUGIN_NAME: logseq-rename-page-shortcut
 
 jobs:
   build:
+    name: Upload Release Asset
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v2
-
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
           node-version: "22.3" # You might need to adjust this value to your own version
-
-      - name: Build
+      - name: Build project
         id: build
         run: |
           npm install
           npm run build
           mkdir ${{ env.PLUGIN_NAME }}
-          cp LICENSE README.md package.json icon.png ${{ env.PLUGIN_NAME }}
-          mv dist ${{ env.PLUGIN_NAME }}
+          cp LICENSE README.md package.json icon.png ${{ env.PLUGIN_NAME }}/.
+          mv dist ${{ env.PLUGIN_NAME }}/.
           zip -r ${{ env.PLUGIN_NAME }}.zip ${{ env.PLUGIN_NAME }}
           ls
           echo "::set-output name=tag_name::$(git tag --sort version:refname | tail -n 1)"
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VERSION: ${{ github.ref }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-
       - name: Upload zip file
         id: upload_zip
         uses: actions/upload-release-asset@v1
@@ -55,7 +51,6 @@ jobs:
           asset_path: ./${{ env.PLUGIN_NAME }}.zip
           asset_name: ${{ env.PLUGIN_NAME }}-${{ steps.build.outputs.tag_name }}.zip
           asset_content_type: application/zip
-
       - name: Upload package.json
         id: upload_metadata
         uses: actions/upload-release-asset@v1
