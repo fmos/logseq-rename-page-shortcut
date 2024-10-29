@@ -4,7 +4,8 @@ on:
   push:
     # Sequence of patterns matched against refs/tags
     tags:
-      - "*" # Push events to matching any tag format, i.e. 1.0, 20.15.10
+      - "*" # Push events to matching any tag format, i.e. 1.0, 20.15.1
+  workflow_dispatch: # Allows manual triggering
 
 env:
   PLUGIN_NAME: logseq-rename-page-shortcut
