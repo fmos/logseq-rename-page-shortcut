@@ -1,13 +1,19 @@
 {
   "name": "logseq-rename-page-shortcut",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "author": "Fabian Stanke",
-  "main": "index.html",
+  "main": "dist/index.html",
   "description": "Registers a shortcut in Logseq to rename the current page.",
   "license": "MIT",
-  "devDependencies": {
-    "@logseq/libs": "^0.0.1-alpha.29"
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --outfile=dist/index.js --minify",
+    "dev": "esbuild src/index.js --bundle --outfile=dist/index.js --sourcemap --watch"
   },
+  "devDependencies": {
+    "@logseq/libs": "^0.0.1-alpha.31",
+    "esbuild": "^0.15.0"
+  },
+  "dependencies": {},
   "logseq": {
     "id": "logseq-rename-page-shortcut",
     "title": "Rename Page Shortcut",
